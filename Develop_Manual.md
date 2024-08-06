@@ -233,6 +233,7 @@ msg.echo("hello,world")
 ### Python嵌入特性
 
 - Dice!采用CPython实现Python的嵌入，需要外部安装有python3.10，如环境变量中不包含python，Windows环境可将`python3.dll`、`python310.dll`与`python310.zip`放入`Dice根目录/bin`文件夹下，然后设置Master配置项`EnablePython`=1并重启；
+- >经验证，于Dice!版本`Ver 2.7.0beta8(662)` 及以上需要使用**Python3.11.5**
 - 所有py脚本执行共用一个虚拟机，需**慎用全局变量**；
 - 全局初始化时以`from dicemaid import *`的方式写入预置函数；
 - 执行关键词回复的py脚本时，视为在本地变量中写入msg后运行；运行结果可文本化时，将作为消息回复；
@@ -249,6 +250,9 @@ msg.echo("hello,world")
 |-- mod
     |-- mod_name.json
     |-- mod_name
+        |--model
+        |   |--model.xml
+        |
         |-- event
         |   |-- good_morning.lua
         |
@@ -260,7 +264,7 @@ msg.echo("hello,world")
         |   |-- reply_good_morning.lua
         |
         |-- speech
-        |   |-- rlobal_msg.yaml
+        |   |-- global_msg.yaml
         |
         |-- image
         |-- audio
@@ -642,6 +646,8 @@ until( cnt_dice < 1 )	--条件为真则跳出循环
 - lua没有三目运算符，但可以通过短路运算符`or`和`and`实现类似效果；
 
   `0.1+0.2==0.3 and 'true' or 'false'`
+
+- 如果要引用其他lua类库，可以使用`require("")`语句，请将库置于`Dice根目录/Diceki`文件夹下
 
 
 ## 前缀指令脚本
@@ -1029,7 +1035,7 @@ getUserConf(nil, "favor") --返回所有用户的favor列表
 取群配置，配置项带\*标记表示会另行计算而非调用存储数据。*(build613+)*群号可以为空，此时遍历所有**记录了该属性**的群并返回以群号=属性值为键值对的table。
 
 ```lua
-getGroupConf(msg.fromQQ, "rc房规", 0)
+getGroupConf(msg.fromGroup, "rc房规", 0)
 ```
 <table><thead><tr><th>输入参数</th><th>变量类型</th><th>说明</th></tr></thead><tbody>
 <tr><td>群号</td><td>number</td><td></td></tr>
